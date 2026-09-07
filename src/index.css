@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .grad-text {
+    background: linear-gradient(90deg, #a78bfa, #d946ef);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .grad-btn {
+    background: linear-gradient(90deg, #8b5cf6, #6d28d9);
+  }
+  .grad-btn:hover {
+    background: linear-gradient(90deg, #9d6bfa, #7c3aed);
+  }
+  .card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .field {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+  }
+  .field:focus {
+    border-color: rgba(139, 92, 246, 0.6);
+    background: rgba(255, 255, 255, 0.05);
+    outline: none;
+  }
+  .mask-fade {
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #07050c;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.4);
+}
