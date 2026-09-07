@@ -1,10 +1,59 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Linkedin, Github, Mail, Phone, Globe, Send, Copy, Check } from 'lucide-react';
+import { Linkedin, Github, Mail, Phone, Globe, Send, Copy, Check, Loader2 } from 'lucide-react';
+import { submitContactForm } from '../services/api';
+
+const textContainerVariant = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.04
+    }
+  }
+};
+
+const letterVariant = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { type: "spring", stiffness: 100, damping: 20 }
+  }
+};
+
+const cardVariant = {
+  hidden: { opacity: 0, y: 60, scale: 0.95 },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    scale: 1,
+    transition: { type: "spring", stiffness: 80, damping: 20, duration: 0.6 }
+  }
+};
+
+const AnimatedText = ({ text, className = "" }) => (
+  <motion.span variants={textContainerVariant} initial="hidden" whileInView="visible" viewport={{ once: false, amount: 0.2 }} className={`inline-block ${className}`}>
+    {text.split('').map((char, index) => (
+      <motion.span key={index} variants={letterVariant} className="inline-block">
+        {char === ' ' ? '\u00A0' : char}
+      </motion.span>
+    ))}
+  </motion.span>
+);
 
 export default function Contact() {
   const [copied, setCopied] = useState(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    type: 'Full-Time Software Engineering Role (Senior / Staff)',
+    message: ''
+  });
 
   const handleCopy = (text, key) => {
     navigator.clipboard.writeText(text);
@@ -12,41 +61,68 @@ export default function Contact() {
     setTimeout(() => setCopied(null), 2000);
   };
 
-  const handleSubmit = (e) => {
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setFormSubmitted(true);
-    setTimeout(() => setFormSubmitted(false), 4000);
+    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
+      setError('Please fill in all required fields.');
+      return;
+    }
+    
+    setIsLoading(true);
+    setError('');
+    
+    try {
+      await submitContactForm(formData);
+      setFormSubmitted(true);
+      setFormData({ name: '', email: '', type: 'Full-Time Software Engineering Role (Senior / Staff)', message: '' });
+      setTimeout(() => setFormSubmitted(false), 5000);
+    } catch (err) {
+      setError(err.message || 'Failed to send message. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <section id="contact" className="py-24 md:py-32 px-6 md:px-10 border-t border-white/10 bg-[#07050c]/80">
+    <section id="contact" className="py-24 md:py-32 px-6 md:px-10 border-t border-white/10 bg-[#07050c]/80 overflow-hidden">
       <div className="max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center max-w-2xl mx-auto mb-16"
-        >
-          <span className="font-mono text-[11px] px-3.5 py-1 rounded-full border border-purple-500/30 bg-purple-500/10 text-purple-300 tracking-wider uppercase mb-4 inline-block font-semibold">
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <motion.span 
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false }}
+            className="font-mono text-[11px] px-3.5 py-1 rounded-full border border-purple-500/30 bg-purple-500/10 text-purple-300 tracking-wider uppercase mb-4 inline-block font-semibold"
+          >
             GET IN TOUCH
-          </span>
+          </motion.span>
           <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-4 text-white">
-            Let's Build Something <span className="grad-text block">Remarkable Together.</span>
+            <AnimatedText text="Let's Build Something " />
+            <br className="hidden md:block" />
+            <AnimatedText text="Remarkable Together." className="grad-text mt-2 block" />
           </h2>
-          <p className="text-gray-400 text-sm md:text-base leading-relaxed">
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false }}
+            transition={{ delay: 0.3 }}
+            className="text-gray-400 text-sm md:text-base leading-relaxed mt-2"
+          >
             Looking for a Senior Full-Stack Engineer for full-time roles, contract development, or technical consulting? Let's connect.
-          </p>
-        </motion.div>
+          </motion.p>
+        </div>
 
         <div className="grid md:grid-cols-2 gap-8">
           {/* Direct coordinates */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="card rounded-2xl p-6 md:p-8 border border-white/10 bg-panel/80 flex flex-col justify-between"
+            variants={cardVariant}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: false, amount: 0.2 }}
+            className="card rounded-2xl p-6 md:p-8 border border-white/10 bg-panel/80 flex flex-col justify-between transition-colors"
           >
             <div>
               <h3 className="font-bold text-xl text-white mb-6">Direct Coordinates</h3>
@@ -59,12 +135,14 @@ export default function Contact() {
                     </div>
                     <div>
                       <p className="text-xs text-gray-400 font-mono">LinkedIn Profile</p>
-                      <p className="text-sm font-medium text-white">linkedin.com/in/mahaksarla</p>
+                      <p className="text-sm font-medium text-white truncate max-w-[200px] md:max-w-[250px]">
+                        linkedin.com/in/mahak-sarla
+                      </p>
                     </div>
                   </div>
                   <button
-                    onClick={() => handleCopy('linkedin.com/in/mahaksarla', 'linkedin')}
-                    className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                    onClick={() => handleCopy('https://www.linkedin.com/in/mahak-sarla-0605bb250?utm_source=share_via&utm_content=profile&utm_medium=member_android', 'linkedin')}
+                    className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors shrink-0"
                   >
                     {copied === 'linkedin' ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
                   </button>
@@ -116,7 +194,7 @@ export default function Contact() {
                     </div>
                     <div>
                       <p className="text-xs text-gray-400 font-mono">Direct Line / WhatsApp</p>
-                      <p className="text-sm font-medium text-white">+1 (555) 382-9014</p>
+                      <p className="text-sm font-medium text-white">+9100000000</p>
                     </div>
                   </div>
                   <button
@@ -139,11 +217,12 @@ export default function Contact() {
 
           {/* Contact Form */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="card rounded-2xl p-6 md:p-8 border border-white/10 bg-panel/80"
+            variants={cardVariant}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: false, amount: 0.2 }}
+            transition={{ delay: 0.2 }}
+            className="card rounded-2xl p-6 md:p-8 border border-white/10 bg-panel/80 transition-colors"
           >
             <h3 className="font-bold text-xl text-white mb-1">Send a Message</h3>
             <p className="text-gray-400 text-xs mb-6">
@@ -158,30 +237,49 @@ export default function Contact() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
+                {error && (
+                  <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-medium text-center">
+                    {error}
+                  </div>
+                )}
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
                     <label className="text-xs font-mono text-gray-400 block mb-1">Your Name</label>
                     <input
                       type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
                       required
                       className="field w-full rounded-xl px-4 py-3 text-sm text-white focus:ring-2 focus:ring-purple-500"
                       placeholder="Full name"
+                      disabled={isLoading}
                     />
                   </div>
                   <div>
                     <label className="text-xs font-mono text-gray-400 block mb-1">Work Email</label>
                     <input
                       type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
                       required
                       className="field w-full rounded-xl px-4 py-3 text-sm text-white focus:ring-2 focus:ring-purple-500"
                       placeholder="you@company.com"
+                      disabled={isLoading}
                     />
                   </div>
                 </div>
 
                 <div>
                   <label className="text-xs font-mono text-gray-400 block mb-1">Project / Role Type</label>
-                  <select className="field w-full rounded-xl px-4 py-3 text-sm text-gray-200 focus:ring-2 focus:ring-purple-500">
+                  <select 
+                    name="type" 
+                    value={formData.type} 
+                    onChange={handleChange} 
+                    className="field w-full rounded-xl px-4 py-3 text-sm text-gray-200 focus:ring-2 focus:ring-purple-500"
+                    disabled={isLoading}
+                  >
                     <option className="bg-gray-900">Full-Time Software Engineering Role (Senior / Staff)</option>
                     <option className="bg-gray-900">Contract / Freelance Project</option>
                     <option className="bg-gray-900">Technical Consulting / Advisory</option>
@@ -192,18 +290,23 @@ export default function Contact() {
                   <label className="text-xs font-mono text-gray-400 block mb-1">Message Context</label>
                   <textarea
                     rows={4}
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
                     required
                     className="field w-full rounded-xl px-4 py-3 text-sm text-white resize-none focus:ring-2 focus:ring-purple-500"
                     placeholder="Tell me about your team, tech stack, goals, or upcoming technical challenges..."
+                    disabled={isLoading}
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full grad-btn text-white font-semibold text-sm shadow-lg shadow-purple-600/30 hover:scale-[1.02] active:scale-95 transition-all"
+                  disabled={isLoading}
+                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full grad-btn text-white font-semibold text-sm shadow-lg shadow-purple-600/30 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-70 disabled:hover:scale-100 disabled:cursor-not-allowed"
                 >
-                  <Send className="w-4 h-4" />
-                  <span>Send Message</span>
+                  {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                  <span>{isLoading ? 'Sending...' : 'Send Message'}</span>
                 </button>
               </form>
             )}

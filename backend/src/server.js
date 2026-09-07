@@ -20,6 +20,7 @@ app.use(express.json());
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/projects', require('./routes/projectRoutes'));
+app.use('/api/contact', require('./routes/contactRoutes'));
 
 // Health check
 app.get('/', (req, res) => res.json({ message: 'Portfolio API is running' }));

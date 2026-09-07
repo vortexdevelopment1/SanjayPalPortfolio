@@ -1,23 +1,31 @@
-import React, { useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { CheckCircle2, AlertCircle, Clock, Cpu, Zap, Layout, Sparkles } from 'lucide-react';
-
-gsap.registerPlugin(ScrollTrigger);
 
 export default function Services() {
   const sectionRef = useRef(null);
 
   // Row 1 Refs
-  const card1Ref = useRef(null);
-  const title1Ref = useRef(null);
-  const text1Ref = useRef(null);
-  const listItemsRef = useRef([]);
+  const row1Ref = useRef(null);
+  const { scrollYProgress: scrollY1 } = useScroll({
+    target: row1Ref,
+    offset: ["0 1", "0.6 0.5"] // Starts when top hits bottom, ends when slightly past center
+  });
+  
+  const row1CardX = useTransform(scrollY1, [0, 1], [-150, 0]);
+  const row1TextX = useTransform(scrollY1, [0, 1], [150, 0]);
+  const row1Opacity = useTransform(scrollY1, [0, 1], [0, 1]);
 
   // Row 2 Refs
-  const card2Ref = useRef(null);
-  const title2Ref = useRef(null);
-  const text2Ref = useRef(null);
+  const row2Ref = useRef(null);
+  const { scrollYProgress: scrollY2 } = useScroll({
+    target: row2Ref,
+    offset: ["0 1", "0.6 0.5"]
+  });
+
+  const row2TextX = useTransform(scrollY2, [0, 1], [-150, 0]);
+  const row2CardX = useTransform(scrollY2, [0, 1], [150, 0]);
+  const row2Opacity = useTransform(scrollY2, [0, 1], [0, 1]);
 
   const taskItems = [
     {
@@ -47,131 +55,6 @@ export default function Services() {
     }
   ];
 
-  // Function to split text string into individual animated character spans
-  const renderSplitText = (text, ref) => {
-    return (
-      <span ref={ref} className="inline-block">
-        {text.split('').map((char, index) => (
-          <span key={index} className="char inline-block opacity-10">
-            {char === ' ' ? '\u00A0' : char}
-          </span>
-        ))}
-      </span>
-    );
-  };
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      /* ------------ ROW 1 GSAP SCROLL ANIMATIONS ------------ */
-      // 1. Card 1 scroll reveal (slide up & scale in)
-      gsap.fromTo(card1Ref.current,
-        { opacity: 0, y: 100, scale: 0.95 },
-        {
-          opacity: 1, y: 0, scale: 1, duration: 1, ease: 'power3.out',
-          scrollTrigger: {
-            trigger: card1Ref.current,
-            start: 'top 85%',
-            end: 'top 40%',
-            scrub: 1
-          }
-        }
-      );
-
-      // 2. List items inside Card 1 pop in staggered
-      gsap.fromTo(listItemsRef.current,
-        { opacity: 0, x: -30 },
-        {
-          opacity: 1, x: 0, stagger: 0.15, duration: 0.8, ease: 'power2.out',
-          scrollTrigger: {
-            trigger: card1Ref.current,
-            start: 'top 75%'
-          }
-        }
-      );
-
-      // 3. Side text letter-by-letter reveal (Title 1)
-      if (title1Ref.current) {
-        const chars1 = title1Ref.current.querySelectorAll('.char');
-        gsap.to(chars1, {
-          opacity: 1,
-          color: '#ffffff',
-          stagger: 0.03,
-          scrollTrigger: {
-            trigger: title1Ref.current,
-            start: 'top 85%',
-            end: 'top 50%',
-            scrub: 0.5
-          }
-        });
-      }
-
-      // 4. Side text letter-by-letter reveal (Paragraph 1)
-      if (text1Ref.current) {
-        const chars1Text = text1Ref.current.querySelectorAll('.char');
-        gsap.to(chars1Text, {
-          opacity: 1,
-          color: '#9793a6',
-          stagger: 0.01,
-          scrollTrigger: {
-            trigger: text1Ref.current,
-            start: 'top 85%',
-            end: 'top 50%',
-            scrub: 0.5
-          }
-        });
-      }
-
-      /* ------------ ROW 2 GSAP SCROLL ANIMATIONS ------------ */
-      // 1. Card 2 scroll reveal
-      gsap.fromTo(card2Ref.current,
-        { opacity: 0, y: 100, scale: 0.95 },
-        {
-          opacity: 1, y: 0, scale: 1, duration: 1, ease: 'power3.out',
-          scrollTrigger: {
-            trigger: card2Ref.current,
-            start: 'top 85%',
-            end: 'top 40%',
-            scrub: 1
-          }
-        }
-      );
-
-      // 2. Side text letter-by-letter reveal (Title 2)
-      if (title2Ref.current) {
-        const chars2 = title2Ref.current.querySelectorAll('.char');
-        gsap.to(chars2, {
-          opacity: 1,
-          color: '#ffffff',
-          stagger: 0.03,
-          scrollTrigger: {
-            trigger: title2Ref.current,
-            start: 'top 85%',
-            end: 'top 50%',
-            scrub: 0.5
-          }
-        });
-      }
-
-      // 3. Side text letter-by-letter reveal (Paragraph 2)
-      if (text2Ref.current) {
-        const chars2Text = text2Ref.current.querySelectorAll('.char');
-        gsap.to(chars2Text, {
-          opacity: 1,
-          color: '#9793a6',
-          stagger: 0.01,
-          scrollTrigger: {
-            trigger: text2Ref.current,
-            start: 'top 85%',
-            end: 'top 50%',
-            scrub: 0.5
-          }
-        });
-      }
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section ref={sectionRef} id="services" className="relative py-24 md:py-32 px-6 md:px-10 border-t border-white/10 bg-[#07050c]">
       <div className="max-w-6xl mx-auto">
@@ -188,12 +71,12 @@ export default function Services() {
           </p>
         </div>
 
-        {/* Row 1: GSAP Scroll Card Left, Alphabet Reveal Text Right */}
-        <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center mb-28">
-          {/* Card 1 with clean visible list items */}
-          <div
-            ref={card1Ref}
-            className="rounded-2xl p-6 border border-white/15 bg-[#0e0b16] shadow-2xl hover:border-purple-500/50 transition-all group"
+        {/* Row 1: Left Card, Right Text */}
+        <div ref={row1Ref} className="grid md:grid-cols-2 gap-10 md:gap-16 items-center mb-28 overflow-hidden">
+          {/* Card 1 */}
+          <motion.div
+            style={{ x: row1CardX, opacity: row1Opacity }}
+            className="rounded-2xl p-6 border border-white/15 bg-[#0e0b16] shadow-2xl hover:border-purple-500/50 transition-colors group"
           >
             <div className="bg-[#07050c] rounded-xl border border-white/10 p-5 shadow-inner">
               <div className="flex items-center justify-between mb-4 pb-3 border-b border-white/10 text-xs">
@@ -211,7 +94,6 @@ export default function Services() {
                 {taskItems.map((item, idx) => (
                   <div
                     key={idx}
-                    ref={el => listItemsRef.current[idx] = el}
                     className="p-3.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-purple-500/60 hover:bg-white/[0.06] transition-all flex items-center justify-between shadow-sm"
                   >
                     <div className="space-y-1">
@@ -235,18 +117,18 @@ export default function Services() {
                 ))}
               </div>
             </div>
-          </div>
+          </motion.div>
 
-          {/* Text Right with GSAP Alphabet Scroll Reveal */}
-          <div className="space-y-5">
+          {/* Text Right */}
+          <motion.div style={{ x: row1TextX, opacity: row1Opacity }} className="space-y-5">
             <span className="font-mono text-[11px] px-3 py-1 rounded-full border border-white/10 text-purple-300 inline-block font-semibold bg-white/[0.02]">
               Distributed Systems
             </span>
-            <h3 className="text-3xl font-extrabold leading-tight">
-              {renderSplitText("Automate complex backend workflows", title1Ref)}
+            <h3 className="text-3xl font-extrabold leading-tight text-white">
+              Automate complex backend workflows
             </h3>
-            <p className="text-sm md:text-base leading-relaxed">
-              {renderSplitText("We engineer resilient event-driven architectures, background workers, and asynchronous queues that process high-volume tasks with zero data loss.", text1Ref)}
+            <p className="text-sm md:text-base leading-relaxed text-[#9793a6]">
+              We engineer resilient event-driven architectures, background workers, and asynchronous queues that process high-volume tasks with zero data loss.
             </p>
             <div className="flex flex-wrap gap-2.5 pt-2">
               <span className="font-mono text-xs px-3 py-1.5 rounded-lg border border-white/10 bg-white/[0.03] text-gray-300 flex items-center gap-1.5">
@@ -259,20 +141,20 @@ export default function Services() {
                 <Sparkles className="w-3.5 h-3.5 text-purple-400" /> 100k+ Jobs/sec
               </span>
             </div>
-          </div>
+          </motion.div>
         </div>
 
-        {/* Row 2: Text Left with Alphabet Scroll Reveal, GSAP Scroll Card Right */}
-        <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
-          <div className="space-y-5 order-2 md:order-1">
+        {/* Row 2: Text Left, Card Right */}
+        <div ref={row2Ref} className="grid md:grid-cols-2 gap-10 md:gap-16 items-center overflow-hidden">
+          <motion.div style={{ x: row2TextX, opacity: row2Opacity }} className="space-y-5 order-2 md:order-1">
             <span className="font-mono text-[11px] px-3 py-1 rounded-full border border-white/10 text-purple-300 inline-block font-semibold bg-white/[0.02]">
               Frontend &amp; Web Apps
             </span>
-            <h3 className="text-3xl font-extrabold leading-tight">
-              {renderSplitText("Pixel-Perfect, High-Performance UI", title2Ref)}
+            <h3 className="text-3xl font-extrabold leading-tight text-white">
+              Pixel-Perfect, High-Performance UI
             </h3>
-            <p className="text-sm md:text-base leading-relaxed">
-              {renderSplitText("Modern web applications built with Next.js, React, and TypeScript. Optimized for sub-second page loads, accessible interactions, and fluid animations.", text2Ref)}
+            <p className="text-sm md:text-base leading-relaxed text-[#9793a6]">
+              Modern web applications built with Next.js, React, and TypeScript. Optimized for sub-second page loads, accessible interactions, and fluid animations.
             </p>
             <div className="flex flex-wrap gap-2.5 pt-2">
               <span className="font-mono text-xs px-3 py-1.5 rounded-lg border border-white/10 bg-white/[0.03] text-gray-300 flex items-center gap-1.5">
@@ -285,12 +167,12 @@ export default function Services() {
                 🎨 Design Systems
               </span>
             </div>
-          </div>
+          </motion.div>
 
-          {/* Card 2 with GSAP Scroll Reveal */}
-          <div
-            ref={card2Ref}
-            className="order-1 md:order-2 rounded-2xl p-6 border border-white/15 bg-[#0e0b16] shadow-2xl hover:border-purple-500/50 transition-all"
+          {/* Card 2 */}
+          <motion.div
+            style={{ x: row2CardX, opacity: row2Opacity }}
+            className="order-1 md:order-2 rounded-2xl p-6 border border-white/15 bg-[#0e0b16] shadow-2xl hover:border-purple-500/50 transition-colors"
           >
             <div className="flex flex-col items-center text-center">
               <div className="w-14 h-14 rounded-full bg-purple-600 flex items-center justify-center mb-5 shadow-lg shadow-purple-600/40">
@@ -318,7 +200,7 @@ export default function Services() {
                 </span>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

@@ -2,9 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
 @layer utilities {
   .grad-text {
-    background: linear-gradient(90deg, #a78bfa, #d946ef);
+    background: linear-gradient(90deg, #8b5cf6, #c026d3);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -47,4 +52,39 @@
 }
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(139, 92, 246, 0.4);
+}
+
+ .animated-white-text {
+  background: linear-gradient(
+    110deg,
+    #ffffff 0%,
+    #ffffff 40%,
+    #a855f7 48%,
+    #d8b4fe 52%,
+    #ffffff 60%,
+    #ffffff 100%
+  );
+
+  background-size: 250% 100%;
+  background-position: 100% 0;
+
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  animation: purpleTextSlide 4s ease-in-out infinite;
+}
+
+@keyframes purpleTextSlide {
+  0% {
+    background-position: 100% 0;
+  }
+
+  25% {
+    background-position: 0% 0;
+  }
+
+  100% {
+    background-position: 0% 0;
+  }
 }

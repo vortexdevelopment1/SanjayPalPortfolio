@@ -72,3 +72,14 @@ export function logout() {
 export function isAuthenticated() {
   return !!getToken();
 }
+
+export async function submitContactForm(data) {
+  const res = await fetch(`${API_URL}/contact`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.message || 'Failed to send message');
+  return result;
+}

@@ -14,14 +14,6 @@ export default function Footer() {
           <span>· © {new Date().getFullYear()} All rights reserved.</span>
         </div>
 
-        {/* Links */}
-        <nav className="flex items-center gap-6">
-          <a href="#about" className="hover:text-white transition-colors">About</a>
-          <a href="#stack" className="hover:text-white transition-colors">Tech Stack</a>
-          <a href="#projects" className="hover:text-white transition-colors">Projects</a>
-          <a href="#philosophy" className="hover:text-white transition-colors">Philosophy</a>
-          <a href="#contact" className="hover:text-white transition-colors">Contact</a>
-        </nav>
 
         {/* Social Icons */}
         <div className="flex items-center gap-4">
@@ -35,7 +27,7 @@ export default function Footer() {
             <Github className="w-4 h-4" />
           </a>
           <a 
-            href="https://linkedin.com/in/mahaksarla" 
+            href="https://www.linkedin.com/in/mahak-sarla-0605bb250?utm_source=share_via&utm_content=profile&utm_medium=member_android" 
             target="_blank" 
             rel="noopener noreferrer" 
             className="p-2 rounded-lg bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
