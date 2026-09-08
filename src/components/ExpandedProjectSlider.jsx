@@ -169,9 +169,6 @@ export default function ExpandedProjectSlider({ onOpenDetails }) {
                         <a href={project.githubUrl} onClick={e => e.stopPropagation()} className="hover:text-white flex items-center gap-1 hover:underline">
                           <Github className="w-4 h-4" /> Code
                         </a>
-                        <a href={project.liveUrl} onClick={e => e.stopPropagation()} className="hover:text-white flex items-center gap-1 hover:underline">
-                          <ExternalLink className="w-4 h-4" /> Demo
-                        </a>
                       </div>
                     </div>
                   </motion.div>
@@ -182,27 +179,11 @@ export default function ExpandedProjectSlider({ onOpenDetails }) {
         })}
       </div>
 
-      {/* Slider Navigation Arrows */}
-      <div className="flex items-center justify-between mt-6">
+      {/* Slider Helper Text */}
+      <div className="flex items-center justify-center mt-6">
         <p className="text-xs text-gray-400 font-mono">
-          Click any card to expand details (Framer Expanded Card Effect)
+          Click any card to expand details
         </p>
-        <div className="flex items-center gap-3">
-          <button 
-            onClick={handlePrev}
-            className="p-3 rounded-full bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-purple-600 transition-all"
-            aria-label="Previous project"
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-          <button 
-            onClick={handleNext}
-            className="p-3 rounded-full bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-purple-600 transition-all"
-            aria-label="Next project"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
-        </div>
       </div>
     </div>
   );

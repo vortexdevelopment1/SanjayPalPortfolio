@@ -14,16 +14,16 @@ const textContainerVariant = {
 };
 
 const letterVariant = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 28 },
   visible: { 
     opacity: 1, 
     y: 0,
-    transition: { type: "spring", stiffness: 100, damping: 20 }
+    transition: { type: "spring", stiffness: 120, damping: 14 }
   }
 };
 
 const cardVariant = {
-  hidden: { opacity: 0, y: 60, scale: 0.95 },
+  hidden: { opacity: 0, y: 40, scale: 0.98 },
   visible: { 
     opacity: 1, 
     y: 0, 
@@ -32,15 +32,30 @@ const cardVariant = {
   }
 };
 
-const AnimatedText = ({ text, className = "" }) => (
-  <motion.span variants={textContainerVariant} initial="hidden" whileInView="visible" viewport={{ once: false, amount: 0.2 }} className={`inline-block ${className}`}>
-    {text.split('').map((char, index) => (
-      <motion.span key={index} variants={letterVariant} className="inline-block">
-        {char === ' ' ? '\u00A0' : char}
-      </motion.span>
-    ))}
-  </motion.span>
-);
+const AnimatedText = ({ text, className = "" }) => {
+  const isGrad = className.includes('grad-text');
+  const cleanClassName = className.replace('grad-text', '').trim();
+
+  return (
+    <motion.span 
+      variants={textContainerVariant} 
+      initial="hidden" 
+      whileInView="visible" 
+      viewport={{ once: false, amount: 0.2 }} 
+      className={`inline-block overflow-hidden py-1 ${cleanClassName}`}
+    >
+      {text.split('').map((char, index) => (
+        <motion.span 
+          key={index} 
+          variants={letterVariant} 
+          className={`inline-block ${isGrad ? 'grad-text' : ''}`}
+        >
+          {char === ' ' ? '\u00A0' : char}
+        </motion.span>
+      ))}
+    </motion.span>
+  );
+};
 
 export default function Contact() {
   const [copied, setCopied] = useState(null);
@@ -94,7 +109,7 @@ export default function Contact() {
           <motion.span 
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false }}
+            viewport={{ once: false, amount: 0.2 }}
             className="font-mono text-[11px] px-3.5 py-1 rounded-full border border-purple-500/30 bg-purple-500/10 text-purple-300 tracking-wider uppercase mb-4 inline-block font-semibold"
           >
             GET IN TOUCH
@@ -107,7 +122,7 @@ export default function Contact() {
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false }}
+            viewport={{ once: false, amount: 0.2 }}
             transition={{ delay: 0.3 }}
             className="text-gray-400 text-sm md:text-base leading-relaxed mt-2"
           >

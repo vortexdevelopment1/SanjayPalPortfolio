@@ -105,10 +105,10 @@ export default function ProjectForm({ project, onSave, onCancel }) {
             <div>
               <label className={labelClass}>Status</label>
               <select name="status" value={form.status} onChange={handleChange} className={inputClass + " cursor-pointer"}>
-                <option value="Live in Production">Live in Production</option>
-                <option value="In Development">In Development</option>
-                <option value="Completed">Completed</option>
-                <option value="Archived">Archived</option>
+                <option value="Live in Production" className="bg-[#0d0917] text-white">Live in Production</option>
+                <option value="In Development" className="bg-[#0d0917] text-white">In Development</option>
+                <option value="Completed" className="bg-[#0d0917] text-white">Completed</option>
+                <option value="Archived" className="bg-[#0d0917] text-white">Archived</option>
               </select>
             </div>
           </div>

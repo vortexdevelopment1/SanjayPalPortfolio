@@ -83,3 +83,50 @@ export async function submitContactForm(data) {
   if (!res.ok) throw new Error(result.message || 'Failed to send message');
   return result;
 }
+
+// Contact Messages API
+export async function getContactMessages() {
+  const res = await fetch(`${API_URL}/contact`, {
+    headers: { ...authHeaders() },
+  });
+  if (!res.ok) throw new Error('Failed to fetch contact messages');
+  return res.json();
+}
+
+export async function getUnreadContactCount() {
+  const res = await fetch(`${API_URL}/contact/unread-count`, {
+    headers: { ...authHeaders() },
+  });
+  if (!res.ok) throw new Error('Failed to fetch unread count');
+  return res.json();
+}
+
+export async function markMessageAsRead(id) {
+  const res = await fetch(`${API_URL}/contact/${id}/read`, {
+    method: 'PATCH',
+    headers: { ...authHeaders() },
+  });
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.message || 'Failed to mark message as read');
+  return result;
+}
+
+export async function markMessageAsUnread(id) {
+  const res = await fetch(`${API_URL}/contact/${id}/unread`, {
+    method: 'PATCH',
+    headers: { ...authHeaders() },
+  });
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.message || 'Failed to mark message as unread');
+  return result;
+}
+
+export async function deleteContactMessage(id) {
+  const res = await fetch(`${API_URL}/contact/${id}`, {
+    method: 'DELETE',
+    headers: { ...authHeaders() },
+  });
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.message || 'Failed to delete message');
+  return result;
+}

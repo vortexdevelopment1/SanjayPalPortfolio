@@ -54,7 +54,7 @@ export default function Hero() {
               ease: "easeInOut",
             }}
           >
-            <SpotlightText colors="from-fuchsia-500 via-purple-500 to-violet-600">
+            <SpotlightText colors="from-white via-slate-200 to-gray-400">
               Crafting High-Performance
             </SpotlightText>
           </motion.span>
@@ -73,7 +73,7 @@ export default function Hero() {
               ease: "easeInOut",
             }}
           >
-            <SpotlightText colors="from-violet-600 via-purple-500 to-fuchsia-500">
+            <SpotlightText colors="from-slate-100 via-white to-slate-300">
               Software &amp;
             </SpotlightText>
           </motion.span>

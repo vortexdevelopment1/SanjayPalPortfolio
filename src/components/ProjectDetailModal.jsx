@@ -149,13 +149,6 @@ export default function ProjectDetailModal({ project, onClose }) {
                 <Github className="w-4 h-4" />
                 <span>View Code Repository</span>
               </a>
-              <a 
-                href={project.liveUrl} 
-                className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full grad-btn text-sm font-semibold text-white shadow-lg shadow-purple-600/30 transition-all hover:scale-105"
-              >
-                <ExternalLink className="w-4 h-4" />
-                <span>Launch Live Application</span>
-              </a>
             </div>
             <button 
               onClick={onClose} 
