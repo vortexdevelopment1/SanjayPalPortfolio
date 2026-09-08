@@ -10,38 +10,8 @@ export default function Footer() {
           <div className="w-7 h-7 rounded-lg grad-btn flex items-center justify-center text-white text-[10px] font-bold font-mono">
             <Code className="w-3.5 h-3.5" />
           </div>
-          <span className="font-bold text-white tracking-wider">MAHAK SARLA</span>
+          <span className="font-bold text-white tracking-wider"> SANJAY PAL</span>
           <span>· © {new Date().getFullYear()} All rights reserved.</span>
-        </div>
-
-
-        {/* Social Icons */}
-        <div className="flex items-center gap-4">
-          <a 
-            href="https://github.com/mahaksarla" 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="p-2 rounded-lg bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
-            aria-label="GitHub"
-          >
-            <Github className="w-4 h-4" />
-          </a>
-          <a 
-            href="https://www.linkedin.com/in/mahak-sarla-0605bb250?utm_source=share_via&utm_content=profile&utm_medium=member_android" 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="p-2 rounded-lg bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
-            aria-label="LinkedIn"
-          >
-            <Linkedin className="w-4 h-4" />
-          </a>
-          <a 
-            href="#" 
-            className="p-2 rounded-lg bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
-            aria-label="Twitter"
-          >
-            <Twitter className="w-4 h-4" />
-          </a>
         </div>
       </div>
     </footer>

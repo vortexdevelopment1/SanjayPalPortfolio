@@ -8,7 +8,6 @@ export default function ProjectForm({ project, onSave, onCancel }) {
     category: project?.category || '',
     status: project?.status || 'Live in Production',
     summary: project?.summary || '',
-    image: project?.image || '',
     techStack: project?.techStack || [],
     overview: project?.overview || '',
     keyFeatures: project?.keyFeatures || [''],
@@ -19,10 +18,37 @@ export default function ProjectForm({ project, onSave, onCancel }) {
   });
 
   const [techInput, setTechInput] = useState('');
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(project?.image || '');
 
   function handleChange(e) {
     const { name, value, type, checked } = e.target;
     setForm(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
+  }
+
+  function handleFileChange(e) {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        alert('File size exceeds 5MB limit');
+        e.target.value = '';
+        return;
+      }
+      if (!['image/jpeg', 'image/png', 'image/jpg'].includes(file.type)) {
+        alert('Only JPG, JPEG, and PNG files are allowed');
+        e.target.value = '';
+        return;
+      }
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => setImagePreview(reader.result);
+      reader.readAsDataURL(file);
+    }
+  }
+
+  function removeImage() {
+    setImageFile(null);
+    setImagePreview('');
   }
 
   function addTech() {
@@ -54,13 +80,31 @@ export default function ProjectForm({ project, onSave, onCancel }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    // Filter out empty features
-    const cleaned = {
-      ...form,
-      keyFeatures: form.keyFeatures.filter(f => f.trim()),
-      techStack: form.techStack.filter(t => t.trim())
-    };
-    onSave(cleaned);
+    if (!imagePreview && !imageFile) {
+      alert("Please select a project image.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('title', form.title);
+    formData.append('category', form.category);
+    formData.append('status', form.status);
+    formData.append('summary', form.summary);
+    formData.append('overview', form.overview);
+    formData.append('architecture', form.architecture);
+    formData.append('githubUrl', form.githubUrl);
+    formData.append('liveUrl', form.liveUrl);
+    formData.append('featured', form.featured);
+    
+    // Filter empty arrays and stringify
+    formData.append('techStack', JSON.stringify(form.techStack.filter(t => t.trim())));
+    formData.append('keyFeatures', JSON.stringify(form.keyFeatures.filter(f => f.trim())));
+    
+    if (imageFile) {
+      formData.append('imageFile', imageFile);
+    }
+
+    onSave(formData);
   }
 
   const inputClass = "w-full px-4 py-2.5 bg-white/[0.04] border border-white/10 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/30 transition-all";
@@ -113,12 +157,27 @@ export default function ProjectForm({ project, onSave, onCancel }) {
             </div>
           </div>
 
-          {/* Image URL */}
+          {/* Image Upload */}
           <div>
-            <label className={labelClass}>Image URL *</label>
-            <input name="image" value={form.image} onChange={handleChange} required className={inputClass} placeholder="https://images.unsplash.com/..." />
-            {form.image && (
-              <img src={form.image} alt="Preview" className="mt-2 h-32 w-full object-cover rounded-lg border border-white/10" />
+            <label className={labelClass}>Project Image (JPG/PNG, Max 5MB) *</label>
+            <input 
+              type="file" 
+              accept="image/jpeg, image/png, image/jpg" 
+              onChange={handleFileChange} 
+              className="w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-500/20 file:text-purple-300 hover:file:bg-purple-500/30 transition-all cursor-pointer"
+            />
+            {imagePreview && (
+              <div className="relative mt-3 inline-block w-full">
+                <img src={imagePreview} alt="Preview" className="h-40 w-full object-cover rounded-lg border border-white/10" />
+                <button
+                  type="button"
+                  onClick={removeImage}
+                  className="absolute top-2 right-2 bg-black/70 hover:bg-red-500 text-white p-1.5 rounded-full transition-colors backdrop-blur-md"
+                  title="Remove Image"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
             )}
           </div>
 
@@ -134,28 +193,7 @@ export default function ProjectForm({ project, onSave, onCancel }) {
             <textarea name="overview" value={form.overview} onChange={handleChange} rows={3} className={inputClass + " resize-none"} placeholder="Detailed overview of the project..." />
           </div>
 
-          {/* Tech Stack */}
-          <div>
-            <label className={labelClass}>Tech Stack</label>
-            <div className="flex gap-2 mb-2">
-              <input value={techInput} onChange={(e) => setTechInput(e.target.value)} className={inputClass} placeholder="React, Node.js, etc."
-                onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addTech(); } }}
-              />
-              <button type="button" onClick={addTech} className="px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors flex-shrink-0">
-                <Plus className="w-4 h-4" />
-              </button>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {form.techStack.map((tech, i) => (
-                <span key={i} className="inline-flex items-center gap-1 px-3 py-1 bg-purple-500/10 border border-purple-500/30 rounded-full text-xs text-purple-300">
-                  {tech}
-                  <button type="button" onClick={() => removeTech(i)} className="text-purple-400 hover:text-red-400 ml-1">
-                    <X className="w-3 h-3" />
-                  </button>
-                </span>
-              ))}
-            </div>
-          </div>
+
 
           {/* Key Features */}
           <div>

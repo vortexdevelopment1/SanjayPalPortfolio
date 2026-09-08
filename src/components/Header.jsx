@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -20,7 +20,7 @@ export default function Header() {
             </svg>
           </div>
           <span className="font-extrabold text-lg tracking-wider text-white font-sans">
-            MAHAK SARLA
+            SANJAY PAL
           </span>
         </Link>
 
@@ -29,7 +29,7 @@ export default function Header() {
           <Link to="/#services" className="hover:text-white transition-colors">Services</Link>
           <Link to="/#projects" className="hover:text-white transition-colors">Projects</Link>
           <Link to="/#about" className="hover:text-white transition-colors">About</Link>
-          <Link to="/#contact" className="hover:text-white transition-colors">Contact</Link>
+          
         </nav>
 
         <div className="hidden lg:flex items-center">
@@ -56,7 +56,7 @@ export default function Header() {
           <Link to="/services" onClick={() => setMobileMenuOpen(false)} className="block text-left w-full text-gray-300 hover:text-white font-medium text-sm">Services</Link>
           <Link to="/projects" onClick={() => setMobileMenuOpen(false)} className="block text-left w-full text-gray-300 hover:text-white font-medium text-sm">Projects</Link>
           <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="block text-left w-full text-gray-300 hover:text-white font-medium text-sm">About</Link>
-          <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="block text-left w-full text-gray-300 hover:text-white font-medium text-sm">Contact</Link>
+          
         </div>
       )}
     </header>

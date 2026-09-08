@@ -126,7 +126,7 @@ export default function Contact() {
             transition={{ delay: 0.3 }}
             className="text-gray-400 text-sm md:text-base leading-relaxed mt-2"
           >
-            Looking for a Senior Full-Stack Engineer for full-time roles, contract development, or technical consulting? Let's connect.
+            Looking for a Full Stack Developer for full-time roles, contract development, or technical consulting? Let's connect.
           </motion.p>
         </div>
 
@@ -142,45 +142,7 @@ export default function Contact() {
             <div>
               <h3 className="font-bold text-xl text-white mb-6">Direct Coordinates</h3>
               <div className="space-y-4">
-                {/* LinkedIn */}
-                <div className="flex items-center justify-between py-3 border-b border-white/10">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-300">
-                      <Linkedin className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-400 font-mono">LinkedIn Profile</p>
-                      <p className="text-sm font-medium text-white truncate max-w-[200px] md:max-w-[250px]">
-                        linkedin.com/in/mahak-sarla
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => handleCopy('https://www.linkedin.com/in/mahak-sarla-0605bb250?utm_source=share_via&utm_content=profile&utm_medium=member_android', 'linkedin')}
-                    className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors shrink-0"
-                  >
-                    {copied === 'linkedin' ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
-                  </button>
-                </div>
 
-                {/* GitHub */}
-                <div className="flex items-center justify-between py-3 border-b border-white/10">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-300">
-                      <Github className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-400 font-mono">GitHub Profile</p>
-                      <p className="text-sm font-medium text-white">github.com/mahaksarla</p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => handleCopy('github.com/mahaksarla', 'github')}
-                    className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
-                  >
-                    {copied === 'github' ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
-                  </button>
-                </div>
 
                 {/* Email */}
                 <div className="flex items-center justify-between py-3 border-b border-white/10">
@@ -190,11 +152,11 @@ export default function Contact() {
                     </div>
                     <div>
                       <p className="text-xs text-gray-400 font-mono">Email Address</p>
-                      <p className="text-sm font-medium text-white">mahaksarla@example.com</p>
+                      <p className="text-sm font-medium text-white">sanjaypal.1995@gmail.com</p>
                     </div>
                   </div>
                   <button
-                    onClick={() => handleCopy('mahaksarla@example.com', 'email')}
+                    onClick={() => handleCopy('sanjaypal@example.com', 'email')}
                     className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
                   >
                     {copied === 'email' ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
@@ -209,7 +171,7 @@ export default function Contact() {
                     </div>
                     <div>
                       <p className="text-xs text-gray-400 font-mono">Direct Line / WhatsApp</p>
-                      <p className="text-sm font-medium text-white">+9100000000</p>
+                      <p className="text-sm font-medium text-white">918878935066</p>
                     </div>
                   </div>
                   <button

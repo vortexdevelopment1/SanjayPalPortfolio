@@ -124,35 +124,11 @@ export default function ProjectDetailModal({ project, onClose }) {
             </p>
           </div>
 
-          {/* Full Tech Stack */}
-          <div className="mb-8">
-            <h3 className="text-sm font-semibold text-gray-400 font-mono mb-3">TECHNOLOGY STACK USED</h3>
-            <div className="flex flex-wrap gap-2">
-              {project.techStack.map((tech, idx) => (
-                <span 
-                  key={idx}
-                  className="font-mono text-xs px-3 py-1.5 rounded-lg border border-white/10 bg-white/[0.04] text-purple-300 font-semibold"
-                >
-                  {tech}
-                </span>
-              ))}
-            </div>
-          </div>
-
           {/* Footer Action Bar */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-white/10">
-            <div className="flex items-center gap-4 w-full sm:w-auto">
-              <a 
-                href={project.githubUrl} 
-                className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full border border-white/20 hover:border-purple-400 text-sm font-semibold text-white transition-all bg-white/[0.03]"
-              >
-                <Github className="w-4 h-4" />
-                <span>View Code Repository</span>
-              </a>
-            </div>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6 border-t border-white/10">
             <button 
               onClick={onClose} 
-              className="text-xs text-gray-400 hover:text-white font-mono underline"
+              className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3 rounded-full bg-purple-600 hover:bg-purple-700 text-sm font-semibold text-white transition-all shadow-lg shadow-purple-600/30"
             >
               Back to Portfolio
             </button>

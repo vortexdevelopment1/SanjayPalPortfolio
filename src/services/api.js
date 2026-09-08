@@ -34,10 +34,14 @@ export async function getProjectById(id) {
 }
 
 export async function createProject(data) {
+  const isFormData = data instanceof FormData;
+  const headers = authHeaders();
+  if (!isFormData) headers['Content-Type'] = 'application/json';
+
   const res = await fetch(`${API_URL}/projects`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...authHeaders() },
-    body: JSON.stringify(data),
+    headers,
+    body: isFormData ? data : JSON.stringify(data),
   });
   const result = await res.json();
   if (!res.ok) throw new Error(result.message || 'Failed to create project');
@@ -45,10 +49,14 @@ export async function createProject(data) {
 }
 
 export async function updateProject(id, data) {
+  const isFormData = data instanceof FormData;
+  const headers = authHeaders();
+  if (!isFormData) headers['Content-Type'] = 'application/json';
+
   const res = await fetch(`${API_URL}/projects/${id}`, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json', ...authHeaders() },
-    body: JSON.stringify(data),
+    headers,
+    body: isFormData ? data : JSON.stringify(data),
   });
   const result = await res.json();
   if (!res.ok) throw new Error(result.message || 'Failed to update project');

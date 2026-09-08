@@ -94,7 +94,7 @@ export default function Philosophy() {
             How I Deliver Value as an Engineer
           </h2>
           <p className="text-gray-400 text-sm md:text-base leading-relaxed">
-            Pragmatic software engineering principles focused on clean code, scalability, and business impact.
+            Backed by 5+ years of full-stack development experience, applying pragmatic software engineering principles focused on clean code, scalability, and business impact.
           </p>
         </motion.div>
 

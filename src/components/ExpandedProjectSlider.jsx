@@ -142,14 +142,7 @@ export default function ExpandedProjectSlider({ onOpenDetails }) {
                       </div>
                       )}
 
-                      {/* Tech stack */}
-                      <div className="flex flex-wrap gap-1.5 pt-2">
-                        {(project.techStack || []).map((tech, idx) => (
-                          <span key={idx} className="font-mono text-[10px] px-2.5 py-1 rounded-md border border-white/10 bg-white/[0.03] text-purple-300">
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
+
                     </div>
 
                     {/* Bottom Action Bar */}
@@ -165,11 +158,7 @@ export default function ExpandedProjectSlider({ onOpenDetails }) {
                         <ArrowRight className="w-4 h-4" />
                       </button>
 
-                      <div className="flex items-center gap-3 text-xs text-purple-300 font-mono">
-                        <a href={project.githubUrl} onClick={e => e.stopPropagation()} className="hover:text-white flex items-center gap-1 hover:underline">
-                          <Github className="w-4 h-4" /> Code
-                        </a>
-                      </div>
+
                     </div>
                   </motion.div>
                 </AnimatePresence>

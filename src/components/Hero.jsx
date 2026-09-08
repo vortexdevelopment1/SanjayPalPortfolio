@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Github, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import TechMarquee from './TechMarquee';
 import SpotlightText from './SpotlightText';
@@ -107,10 +107,10 @@ export default function Hero() {
           <SpotlightText colors="from-fuchsia-500 via-purple-500 to-violet-600" className="w-full">
             I'm{" "}
             <span className="text-white font-semibold">
-              Mahak Sarla
+              Sanjay Pal
             </span>{" "}
-            — a Software Engineer specializing in modern full-stack
-            architectures, high-concurrency backend services, and
+            — a Full Stack Developer with 5+ years of experience in modern full-stack
+            development, high-concurrency backend services, and
             pixel-crisp frontend experiences.
           </SpotlightText>
         </motion.p>
@@ -122,18 +122,15 @@ export default function Hero() {
           transition={{ duration: 1, delay: 2 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
-          <a
-            href="https://github.com/mahaksarla"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full grad-btn text-white font-semibold text-sm shadow-xl shadow-purple-600/25 hover:shadow-purple-600/40 transition-all hover:scale-105 active:scale-95"
+          <Link 
+            to="/#contact" 
+            className="text-sm font-semibold px-7 py-3.5 rounded-full bg-[#8b5cf6] text-white hover:bg-[#7c3aed] transition-colors shadow-md shadow-purple-600/20"
           >
-            <Github className="w-4 h-4" />
-            <span>View GitHub</span>
-          </a>
+            Contact
+          </Link>
 
           <Link
-            to="/#projects"
+            to="/projects"
             className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full border border-white/10 bg-white/[0.02] text-sm font-medium text-gray-200 hover:border-purple-500/50 hover:bg-white/[0.05] transition-all hover:scale-105 active:scale-95"
           >
             <span>Explore Projects</span>

@@ -83,7 +83,7 @@ export default function AllProjects() {
           className="mb-8"
         >
           <Link 
-            to="/#projects" 
+            to="/" 
             className="inline-flex items-center gap-2 text-sm font-mono text-purple-300 hover:text-white transition-colors bg-white/[0.04] hover:bg-white/[0.08] px-4 py-2 rounded-full border border-purple-500/20"
           >
             <ArrowLeft className="w-4 h-4" />
