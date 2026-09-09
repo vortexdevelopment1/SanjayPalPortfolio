@@ -1,6 +1,6 @@
-﻿const fs = require('fs');
+const fs = require('fs');
 
-const homePath = 'C:/template to html/src/pages/Home.jsx';
+const homePath = 'C:/template to html/frontend/src/pages/Home.jsx';
 let homeCode = fs.readFileSync(homePath, 'utf8');
 
 homeCode = homeCode.replace(
@@ -10,7 +10,7 @@ homeCode = homeCode.replace(
 
 fs.writeFileSync(homePath, homeCode);
 
-const heroPath = 'C:/template to html/src/components/Hero.jsx';
+const heroPath = 'C:/template to html/frontend/src/components/Hero.jsx';
 let heroCode = fs.readFileSync(heroPath, 'utf8');
 
 console.log("Hero Code snippet:");

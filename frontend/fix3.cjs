@@ -1,4 +1,4 @@
-﻿const fs = require('fs');
+const fs = require('fs');
 const code = import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -74,5 +74,5 @@ export default function Header() {
     </div>
   );
 }\;
-fs.writeFileSync('C:/template to html/src/components/Header.jsx', code);
+fs.writeFileSync('C:/template to html/frontend/src/components/Header.jsx', code);
 console.log('rewritten Header.jsx');

@@ -1,6 +1,6 @@
-﻿const fs = require('fs');
+const fs = require('fs');
 
-const heroPath = 'C:/template to html/src/components/Hero.jsx';
+const heroPath = 'C:/template to html/frontend/src/components/Hero.jsx';
 let heroCode = fs.readFileSync(heroPath, 'utf8');
 
 heroCode = heroCode.replace(
