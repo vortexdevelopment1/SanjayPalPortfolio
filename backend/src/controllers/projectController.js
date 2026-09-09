@@ -50,10 +50,13 @@ const getProjectById = async (req, res) => {
   }
 };
 
+const { cloudinary } = require('../config/cloudinary');
+
 const parseProjectData = (req) => {
   let data = { ...req.body };
   if (req.file) {
-    data.image = `/uploads/${req.file.filename}`;
+    // multer-storage-cloudinary stores the secure URL in req.file.path
+    data.image = req.file.path;
   }
   
   // Parse arrays from FormData
@@ -65,16 +68,19 @@ const parseProjectData = (req) => {
   return data;
 };
 
-const deleteLocalImage = (imageUrl) => {
-  if (imageUrl && imageUrl.includes('/uploads/')) {
+const deleteCloudinaryImage = async (imageUrl) => {
+  if (imageUrl && imageUrl.includes('cloudinary.com')) {
     try {
-      const filename = imageUrl.split('/uploads/')[1];
-      const filePath = path.join(__dirname, '../../uploads', filename);
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
-      }
+      // Extract public_id from Cloudinary URL (e.g., https://res.cloudinary.com/cloud_name/image/upload/v1234/folder/filename.jpg)
+      const urlParts = imageUrl.split('/');
+      const filenameWithExtension = urlParts[urlParts.length - 1];
+      const folderName = urlParts[urlParts.length - 2];
+      const filename = filenameWithExtension.split('.')[0];
+      const publicId = `${folderName}/${filename}`;
+      
+      await cloudinary.uploader.destroy(publicId);
     } catch (err) {
-      console.error('Failed to delete image:', err);
+      console.error('Failed to delete image from Cloudinary:', err);
     }
   }
 };
@@ -85,7 +91,7 @@ const createProject = async (req, res) => {
     const project = await Project.create(data);
     res.status(201).json(project);
   } catch (error) {
-    if (req.file) deleteLocalImage(`/uploads/${req.file.filename}`); // cleanup if db fails
+    if (req.file) await deleteCloudinaryImage(req.file.path); // cleanup if db fails
     if (error.name === 'ValidationError') {
       return res.status(400).json({ message: error.message });
     }
@@ -97,13 +103,13 @@ const updateProject = async (req, res) => {
   try {
     const { id } = req.params;
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      if (req.file) deleteLocalImage(`/uploads/${req.file.filename}`);
+      if (req.file) await deleteCloudinaryImage(req.file.path);
       return res.status(400).json({ message: 'Invalid project ID' });
     }
     
     const existingProject = await Project.findById(id);
     if (!existingProject) {
-      if (req.file) deleteLocalImage(`/uploads/${req.file.filename}`);
+      if (req.file) await deleteCloudinaryImage(req.file.path);
       return res.status(404).json({ message: 'Project not found' });
     }
 
@@ -111,13 +117,13 @@ const updateProject = async (req, res) => {
     
     // If a new image was uploaded, delete the old one
     if (req.file && existingProject.image) {
-      deleteLocalImage(existingProject.image);
+      await deleteCloudinaryImage(existingProject.image);
     }
 
     const project = await Project.findByIdAndUpdate(id, data, { new: true, runValidators: true });
     res.status(200).json(project);
   } catch (error) {
-    if (req.file) deleteLocalImage(`/uploads/${req.file.filename}`);
+    if (req.file) await deleteCloudinaryImage(req.file.path);
     if (error.name === 'ValidationError') {
       return res.status(400).json({ message: error.message });
     }
@@ -138,7 +144,7 @@ const deleteProject = async (req, res) => {
     
     // Cleanup image on delete
     if (project.image) {
-      deleteLocalImage(project.image);
+      await deleteCloudinaryImage(project.image);
     }
 
     res.status(200).json({ message: 'Project deleted' });
