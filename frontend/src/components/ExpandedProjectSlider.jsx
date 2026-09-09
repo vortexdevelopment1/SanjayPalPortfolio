@@ -12,8 +12,12 @@ export default function ExpandedProjectSlider({ onOpenDetails }) {
     async function fetchProjects() {
       try {
         const data = await getProjects();
-        setProjectsData(data);
-        if (data.length > 0) setActiveId(data[0]._id);
+        // Filter featured projects, or take top 4 if none are featured
+        const featured = data.filter(p => p.featured);
+        const displayProjects = featured.length > 0 ? featured.slice(0, 5) : data.slice(0, 4);
+        
+        setProjectsData(displayProjects);
+        if (displayProjects.length > 0) setActiveId(displayProjects[0]._id);
       } catch (err) {
         console.error('Error fetching projects:', err);
       }
