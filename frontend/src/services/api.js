@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'https://sanjaypalportfolio.onrender.com/api';
 
 function getToken() {
   return localStorage.getItem('admin_token');
@@ -21,16 +21,46 @@ export async function loginAdmin(email, password) {
   return data;
 }
 
+function fixProjectImageUrl(project) {
+  if (!project || !project.image) return project;
+  const backendBaseUrl = API_URL.replace(/\/api$/, '');
+  
+  if (project.image.includes('http://localhost:5000')) {
+    project.image = project.image.replace('http://localhost:5000', backendBaseUrl);
+  } else if (project.image.startsWith('/uploads/')) {
+    project.image = `${backendBaseUrl}${project.image}`;
+  }
+  return project;
+}
+
 export async function getProjects() {
-  const res = await fetch(`${API_URL}/projects`);
-  if (!res.ok) throw new Error('Failed to fetch projects');
-  return res.json();
+  console.log('[API URL CONFIG] API_URL is:', API_URL);
+  const targetUrl = `${API_URL}/projects`;
+  console.log('[PROJECT REQUEST] Fetching from:', targetUrl);
+  
+  try {
+    const res = await fetch(targetUrl);
+    console.log('[PROJECT RESPONSE] Status:', res.status, res.statusText);
+    
+    if (!res.ok) {
+      console.error('[PROJECT RESPONSE ERROR] Response not ok:', await res.text());
+      throw new Error(`Failed to fetch projects: ${res.status}`);
+    }
+    
+    const data = await res.json();
+    console.log('[PROJECT COUNT] Data received:', Array.isArray(data) ? data.length : typeof data);
+    return Array.isArray(data) ? data.map(fixProjectImageUrl) : data;
+  } catch (error) {
+    console.error('[PROJECT FETCH ERROR] Exact error:', error);
+    throw error;
+  }
 }
 
 export async function getProjectById(id) {
   const res = await fetch(`${API_URL}/projects/${id}`);
   if (!res.ok) throw new Error('Failed to fetch project');
-  return res.json();
+  const data = await res.json();
+  return fixProjectImageUrl(data);
 }
 
 export async function createProject(data) {
@@ -45,7 +75,7 @@ export async function createProject(data) {
   });
   const result = await res.json();
   if (!res.ok) throw new Error(result.message || 'Failed to create project');
-  return result;
+  return fixProjectImageUrl(result);
 }
 
 export async function updateProject(id, data) {
@@ -60,7 +90,7 @@ export async function updateProject(id, data) {
   });
   const result = await res.json();
   if (!res.ok) throw new Error(result.message || 'Failed to update project');
-  return result;
+  return fixProjectImageUrl(result);
 }
 
 export async function deleteProject(id) {
@@ -138,3 +168,4 @@ export async function deleteContactMessage(id) {
   if (!res.ok) throw new Error(result.message || 'Failed to delete message');
   return result;
 }
+

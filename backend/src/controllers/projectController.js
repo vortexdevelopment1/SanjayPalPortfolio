@@ -31,8 +31,7 @@ const getProjectById = async (req, res) => {
 const parseProjectData = (req) => {
   let data = { ...req.body };
   if (req.file) {
-    const baseUrl = req.protocol + '://' + req.get('host');
-    data.image = `${baseUrl}/uploads/${req.file.filename}`;
+    data.image = `/uploads/${req.file.filename}`;
   }
   
   // Parse arrays from FormData

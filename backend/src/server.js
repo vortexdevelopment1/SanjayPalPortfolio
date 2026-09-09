@@ -8,9 +8,16 @@ dotenv.config({ path: path.join(__dirname, '../.env') });
 
 const app = express();
 
+// Prevent CORS caching issues (MUST be before cors middleware to apply to OPTIONS preflight)
+app.use((req, res, next) => {
+  res.header('Vary', 'Origin');
+  res.header('Cache-Control', 'no-cache, no-store, must-revalidate');
+  next();
+});
+
 // CORS
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: true,
   credentials: true
 }));
 
