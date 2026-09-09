@@ -5,7 +5,20 @@ const path = require('path');
 
 const getProjects = async (req, res) => {
   try {
-    const projects = await Project.find().sort({ createdAt: -1 });
+    let projects = await Project.find().sort({ createdAt: -1 });
+    const baseUrl = req.protocol + '://' + req.get('host');
+    
+    // Sanitize image URLs dynamically so we don't need a frontend redeploy
+    projects = projects.map(p => {
+      const proj = p.toJSON();
+      if (proj.image && proj.image.includes('http://localhost:5000')) {
+        proj.image = proj.image.replace('http://localhost:5000', baseUrl);
+      } else if (proj.image && proj.image.startsWith('/uploads/')) {
+        proj.image = `${baseUrl}${proj.image}`;
+      }
+      return proj;
+    });
+
     res.status(200).json(projects);
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
@@ -22,7 +35,16 @@ const getProjectById = async (req, res) => {
     if (!project) {
       return res.status(404).json({ message: 'Project not found' });
     }
-    res.status(200).json(project);
+    
+    const baseUrl = req.protocol + '://' + req.get('host');
+    const proj = project.toJSON();
+    if (proj.image && proj.image.includes('http://localhost:5000')) {
+      proj.image = proj.image.replace('http://localhost:5000', baseUrl);
+    } else if (proj.image && proj.image.startsWith('/uploads/')) {
+      proj.image = `${baseUrl}${proj.image}`;
+    }
+
+    res.status(200).json(proj);
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
   }
